@@ -5,7 +5,7 @@ Hướng thực hiện đã chọn: CNN làm mô hình baseline và BEATs làm h
 1. Self-supervised learning
 2. Mel Spectrogram
 
-=======================================================================================================
+======================================================================================================
 
 Thư viện Pytorch?
 Mạng CNN?
@@ -50,7 +50,7 @@ Mạng CNN?
 - DataLoader: Chia batch, xáo trộn dữ liệu, nạp mẫu
 - Training Loop: Dự đoán -> Loss -> Gradient -> Cập nhật
 
-=======================================================================================================
+======================================================================================================
 
 \*\*\* Machine Learning [Google - ML](https://developers.google.com/machine-learning/intro-to-ml)
 
@@ -116,7 +116,7 @@ Mạng CNN?
 - AI tạo sinh họa động dựa vào việc học những quy luật trong dữ liệu với mục tiêu là tạo ra một dữ liệu mới nhưng giống cũ.
 - Để có thể tạo ra những nội dung sáng tạo và riêng biệt, AI tạo sinh đầu tiên được huấn luyện dựa trên học không giám sát, để mô hình có thể học bắt chước lại dữ liệu được huấn luyện. Mô hình sau đó có thể được tiếp tục huấn luyện sử dụng học có giám sát hoặc học tăng cường trên dữ liệu liên quan đến nhiệm vụ mà mô hình phải thực hiện, như là tóm tắt một bài viết hoặc chỉnh sửa 1 hình ảnh
 
-=======================================================================================================
+======================================================================================================
 Supervised Learning?
 
 1. Các khái niệm cơ bản
@@ -271,7 +271,17 @@ Supervised Learning?
 ======================================================================================================
 
 CNN?
+
 1. CNN
+
 - CNN (Convolutional Neural Network) hay mạng nơron tích chập là một loại Neural Network thiết kế dùng để học các đặc trưng cục bộ trong dữ liệu, đặc biệt hiệu quả với dữ liệu có cấu trúc như hình ảnh. CNN cũng được sử dụng trong xử lý tín hiệu âm thanh, đặc biệt khi biểu diễn âm thanh dưới dạng spectrogram
 
 - Khi xử lý hình ảnh ở kích thước lớn, đối với NN thông thường sẽ cần một lượng lớn đầu vào và lượng lớn trọng số. CNN sinh ra để có thể giảm thiểu số lượng trọng số trong khi vẫn trích xuất được đặc trưng của ảnh
+
+2. Các lớp dùng để tạo nên CNN gồm:
+
+- Input: giữ giá trị thô từng điểm ảnh, VD như ảnh có kích thước là 32x32 với 3 kênh màu RGB sẽ có kích thước 32x32x3
+- Convulation Layer: Tính toán đầu ra của các nơ-ron được kết nối với các vùng cục bộ trong đầu vào, mỗi nơ-ron tính tích vô hướng giữa trọng số của chúng và một vùng nhỏ mà chúng được kết nối trong thể tích đầu vào. Điều này có thể tạo ra kích thước 32x32x12 nếu chúng ta quyết định sử dụng 12 bộ lọc.
+- RELU Layer: sẽ áp dụng hàm kích hoạt từng phần tử. Điều này giữ nguyên kích thước của khối 32x32x12.
+- POOL Layer sẽ thực hiện thao tác lấy mẫu giảm theo các chiều không gian (chiều rộng, chiều cao), tạo ra kích thước 16x16x12.
+- FC Layer (Full-Connected Layer) sẽ tính toán điểm số của các lớp, tạo ra một khối dữ liệu có kích thước 1x1x10, trong đó mỗi số trong 10 số tương ứng với một điểm số của lớp, chẳng hạn như trong 10 hạng mục của CIFAR-10. Giống như các mạng nơ-ron thông thường và như tên gọi của nó, mỗi nơ-ron trong lớp này sẽ được kết nối với tất cả các số trong khối dữ liệu trước đó.
