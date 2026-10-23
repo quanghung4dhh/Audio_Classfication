@@ -41,7 +41,7 @@
 - Trong tuần này, chủ yếu sẽ thiết kế phần khối tiền xử lý dữ liệu.
 - Khối tiền xử lý dữ liệu có vai trò biến tín hiệu âm thanh đầu vào thành dữ liệu phù hợp để mô hình học máy có thể tiếp nhận và phân loại.
 - Trong khối này, sẽ có những khối nhỏ hơn như sau:
-  Kiểm tra và khảo sát dữ liệu -> mono, resampling 16 kHz -> Cắt/đệm về 4s -> Log-Mel spectrogram -> Tensor + nhãn lớp
+  Kiểm tra và khảo sát dữ liệu -> mono, resampling 16 kHz -> Cắt/đệm về 4s -> Log-Mel spectrogram -> Tensor + nhãn lớp <br>
   ![Preprocessing block](../assets/Preprocessing_block.png)
 
 ======================================================================================================
@@ -60,9 +60,9 @@
     - class: Tên phân loại của lớp âm thanh đó
 - Vai trò của khối này là đọc file UrbanSound.csv, từ đó kiểm tra cấu trúc của dữ liệu, bảo đảm dữ liệu có cấu trúc hợp lệ
 - Lưu đồ thuật toán: [inspect_dataset.py](../src/inspect_dataset.py)
-Đọc file .csv -> Kiểm tra các cột cần thiết -> Thống kê lớp và fold -> Kiểm tra nhãn trùng lặp hoặc không nhất quán -> Tạo đường dẫn cho từng hàng csv -> Kiểm tra file bị thiếu và file dư -> In báo cáo và vẽ thống kê các lớp
+Đọc file .csv -> Kiểm tra các cột cần thiết -> Thống kê lớp và fold -> Kiểm tra nhãn trùng lặp hoặc không nhất quán -> Tạo đường dẫn cho từng hàng csv -> Kiểm tra file bị thiếu và file dư -> In báo cáo và vẽ thống kê các lớp <br>
 ![Diagram1.1](../assets/Diagram1.1.png)
 - Ngoài ra trong khối này còn có trực quan hóa âm thanh trước khi đưa vào khối resampling và cắt/đệm sau để có thể so sánh [eda.py](../src/eda.py)
 - Lưu đồ thuật toán: 
-Đọc mẫu âm thanh -> Tính FFT -> Tính STFT -> Đổi sang thang Mel -> Vẽ Mel Spectrogram 
+Đọc mẫu âm thanh -> Tính FFT -> Tính STFT -> Đổi sang thang Mel -> Vẽ Mel Spectrogram <br>
 ![Diagram1.2](../assets/Diagram1.2.png)
