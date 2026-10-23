@@ -71,7 +71,7 @@
 ## 2. Resampling về 16kHz và cắt/đệm về 4s [preprocess.py](../src/preprocess.py)
 
 - Vì mỗi file âm thanh có thể có tần số lấy mẫu khác nhau cũng như là thời lượng khác nhau nên việc đồng nhất toàn bộ file âm thanh về 1 tần số lấy mẫu và 1 độ dài như nhau sẽ giúp cho mô hình có thể làm việc hiệu quả và tiết kiệm được dữ liệu đầu vào
-- Resampling về 16Hz: thống nhất cách lấy mẫu. Hai tệp có thể cùng mô tả một khoảng thời gian nhưng số mẫu có thể khác nhau. Ở đây, chúng ta thống nhất cách lấy mẫu là 16kHz, chuyển tín hiệu sang một tần số lấy mẫu chung
+- Resampling về 16kHz: thống nhất cách lấy mẫu. Hai tệp có thể cùng mô tả một khoảng thời gian nhưng số mẫu có thể khác nhau. Ở đây, chúng ta thống nhất cách lấy mẫu là 16kHz, chuyển tín hiệu sang một tần số lấy mẫu chung
 - Cắt/đệm về 4s: thống nhất độ dài. Vì CNN thường được huấn luyện trên các batch dùng nhiều mẫu nên nếu mỗi mẫu có độ dài khác nhau, kích thước tensor đầu vào có thể khác nhau và không thể ghép batch theo cách thông thường. Đối với những mẫu có độ dài ngắn hơn 4s, ta sẽ đệm thêm số 0 vào cuối để đủ 4s, đối với những mẫu có độ dài bằng 4s thì sẽ giữ nguyên, còn đối với những mẫu có độ dài dài hơn 4s thì sẽ cắt bớt
 - Sau khi tiến hành resampling và cắt/đệm, mỗi tệp sẽ có số mẫu là 16kHz x 4s = 64.000 (mẫu)
 - Lưu đồ thuật toán: <br>
