@@ -96,3 +96,14 @@
 - Lưu đồ thuật toán:
   ![Tensors and labels](../assets/Diagram4.1.png)
 
+======================================================================================================
+
+## Reference:
+
+1. Salamon, J., Jacoby, C., & Bello, J. P. (2014). A Dataset and Taxonomy for Urban Sound Research. ACM International Conference on Multimedia. Dùng làm tài liệu nguồn về UrbanSound8K.
+
+2. Doshi, K. (2021). Audio Deep Learning Made Simple — Sound Classification, Step-by-Step. Dùng để tham khảo quy trình phân loại âm thanh bằng deep learning.
+
+3. Librosa documentation. librosa.load và librosa.feature.melspectrogram. Dùng để đối chiếu cách đọc audio và tạo phổ Mel.
+4. PyTorch documentation. Datasets & DataLoaders. Dùng để đối chiếu cách tổ chức dữ liệu thành batch.
+5. Ketan Doshi: Why Mel Spectrograms perform better và Sound Classification, Step-by-Step. Hai bài viết giải thích quy trình tiền xử lý và cách đưa đặc trưng âm thanh vào bộ phân loại
