@@ -93,7 +93,7 @@
 ## 4. Tensor và nhãn lớp: [dataset.py](../src/dataset.py)
 
 - Khối này có vai trò chuyển một bản ghi trong metadata thành dữ liệu mà Pytorch hiểu được
-- Lưu đồ thuật toán:
+- Lưu đồ thuật toán: <br>
   ![Tensors and labels](../assets/Diagram4.1.png)
 
 ======================================================================================================
