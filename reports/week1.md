@@ -33,3 +33,36 @@
 
 - Record any remaining data or pipeline errors.
 - Next: build and train the CNN baseline.
+
+======================================================================================================
+
+# Week 1: Preprocessing block
+
+- Trong tuần này, chủ yếu sẽ thiết kế phần khối tiền xử lý dữ liệu.
+- Khối tiền xử lý dữ liệu có vai trò biến tín hiệu âm thanh đầu vào thành dữ liệu phù hợp để mô hình học máy có thể tiếp nhận và phân loại.
+- Trong khối này, sẽ có những khối nhỏ hơn như sau:
+  Kiểm tra và khảo sát dữ liệu -> mono, resampling 16 kHz -> Cắt/đệm về 4s -> Log-Mel spectrogram -> Tensor + nhãn lớp
+  ![Preprocessing block](../assets/Preprocessing_block.png)
+
+======================================================================================================
+
+## 1. Kiểm tra và khảo sát dữ liệu
+
+- Với dữ liệu đầu vào là UrbanSound8K, có cấu trúc như sau
+  - fold1 - fold10: chứa 8732 file âm thanh .wav, là một bộ dữ liệu âm thanh chuẩn được gán nhãn công khai
+  - file UrbanSound8K.csv: Đây là file .csv cung cấp thông tin chi tiết cho từng file âm thanh trên từng dòng, bao gồm:
+    - slice_file_name: Tên của tệp âm thanh
+    - fsID: ID gốc của đoạn thu âm trên nền tảng [Freesound](https://freesound.org/)
+    - start và end: Thời gian bắt đấu và kết thúc của phân đoạn được cắt ra từ đoạn thu âm gốc
+    - salience: Độ nổi bật của âm thanh, nhận giá trị 1 (âm thanh tiền cảnh - foreground) hoặc 2 (âm thanh nền - background)
+    - fold: Thư mục chứ file âm thanh đó nhận giá trị từ 1 - 10, tương ứng với fold1 - fold10
+    - classID: Mã số định danh của loại âm thanh, nhận giá trị từ 0 - 9
+    - class: Tên phân loại của lớp âm thanh đó
+- Vai trò của khối này là đọc file UrbanSound.csv, từ đó kiểm tra cấu trúc của dữ liệu, bảo đảm dữ liệu có cấu trúc hợp lệ
+- Lưu đồ thuật toán: [inspect_dataset.py](../src/inspect_dataset.py)
+Đọc file .csv -> Kiểm tra các cột cần thiết -> Thống kê lớp và fold -> Kiểm tra nhãn trùng lặp hoặc không nhất quán -> Tạo đường dẫn cho từng hàng csv -> Kiểm tra file bị thiếu và file dư -> In báo cáo và vẽ thống kê các lớp
+![Diagram1.1](../assets/Diagram1.1.png)
+- Ngoài ra trong khối này còn có trực quan hóa âm thanh trước khi đưa vào khối resampling và cắt/đệm sau để có thể so sánh [eda.py](../src/eda.py)
+- Lưu đồ thuật toán: 
+Đọc mẫu âm thanh -> Tính FFT -> Tính STFT -> Đổi sang thang Mel -> Vẽ Mel Spectrogram 
+![Diagram1.2](../assets/Diagram1.2.png)

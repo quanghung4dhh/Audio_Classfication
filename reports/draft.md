@@ -10,7 +10,7 @@ Hướng thực hiện đã chọn: CNN làm mô hình baseline và BEATs làm h
 Thư viện Pytorch?
 Mạng CNN?
 
-\*\*\*Pytorch: https://pytorch.org/get-started/locally/
+## Pytorch: https://pytorch.org/get-started/locally/
 
 1. Tensor? [Sample Code](../learning/tensor.py)
 
@@ -52,7 +52,7 @@ Mạng CNN?
 
 ======================================================================================================
 
-\*\*\* Machine Learning [Google - ML](https://developers.google.com/machine-learning/intro-to-ml)
+## Machine Learning [Google - ML](https://developers.google.com/machine-learning/intro-to-ml)
 
 - Về cơ bản, ML là quá trình huấn luyện một phần mềm, được gọi là model, để có thể tạo ra dự đoán hoặc tạo ra nội dung từ dữ liệu
 - Ví dụ đơn giản: Giả sử ta muốn tạo ra một app dùng để dự đoán thời tiết có mưa
@@ -67,7 +67,7 @@ Mạng CNN?
 
 ======================================================================================================
 
-\*\*\* Supervised Learing? Unsupervised Learning? Reinforcement Learning? Generative AI?
+## Supervised Learing? Unsupervised Learning? Reinforcement Learning? Generative AI?
 
 1. Supervised Learning:
 
@@ -117,7 +117,7 @@ Mạng CNN?
 - Để có thể tạo ra những nội dung sáng tạo và riêng biệt, AI tạo sinh đầu tiên được huấn luyện dựa trên học không giám sát, để mô hình có thể học bắt chước lại dữ liệu được huấn luyện. Mô hình sau đó có thể được tiếp tục huấn luyện sử dụng học có giám sát hoặc học tăng cường trên dữ liệu liên quan đến nhiệm vụ mà mô hình phải thực hiện, như là tóm tắt một bài viết hoặc chỉnh sửa 1 hình ảnh
 
 ======================================================================================================
-Supervised Learning?
+## Supervised Learning?
 
 1. Các khái niệm cơ bản
 
@@ -188,7 +188,7 @@ Supervised Learning?
 
 ======================================================================================================
 
-\*\*\* Mạng neutral network, loss function, gradient?
+## Mạng neutral network, loss function, gradient?
 [Google - Neutral network](https://developers.google.com/machine-learning/crash-course/neural-networks)
 [Google - Loss Function](https://developers.google.com/machine-learning/crash-course/linear-regression/loss)
 
@@ -270,7 +270,7 @@ Supervised Learning?
 
 ======================================================================================================
 
-CNN?
+## CNN?
 
 1. CNN
 
