@@ -60,9 +60,10 @@
     - class: Tên phân loại của lớp âm thanh đó
 - Vai trò của khối này là đọc file UrbanSound.csv, từ đó kiểm tra cấu trúc của dữ liệu, bảo đảm dữ liệu có cấu trúc hợp lệ
 - Lưu đồ thuật toán: [inspect_dataset.py](../src/inspect_dataset.py)
-Đọc file .csv -> Kiểm tra các cột cần thiết -> Thống kê lớp và fold -> Kiểm tra nhãn trùng lặp hoặc không nhất quán -> Tạo đường dẫn cho từng hàng csv -> Kiểm tra file bị thiếu và file dư -> In báo cáo và vẽ thống kê các lớp <br>
-![Diagram1.1](../assets/Diagram1.1.png)
+  Đọc file .csv -> Kiểm tra các cột cần thiết -> Thống kê lớp và fold -> Kiểm tra nhãn trùng lặp hoặc không nhất quán -> Tạo đường dẫn cho từng hàng csv -> Kiểm tra file bị thiếu và file dư -> In báo cáo và vẽ thống kê các lớp <br>
+  ![Diagram1.1](../assets/Diagram1.1.png)
 - Ngoài ra trong khối này còn có trực quan hóa âm thanh trước khi đưa vào khối resampling và cắt/đệm sau để có thể so sánh [eda.py](../src/eda.py)
-- Lưu đồ thuật toán: 
-Đọc mẫu âm thanh -> Tính FFT -> Tính STFT -> Đổi sang thang Mel -> Vẽ Mel Spectrogram <br>
-![Diagram1.2](../assets/Diagram1.2.png)
+- Lưu đồ thuật toán:
+  Đọc mẫu âm thanh -> Tính FFT -> Tính STFT -> Đổi sang thang Mel -> Vẽ Mel Spectrogram <br>
+  ![Diagram1.2](../assets/Diagram1.2.png) <br>
+  ![Sample audio analysis](../outputs/figures/sample_audio_analysis.png)
