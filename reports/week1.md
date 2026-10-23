@@ -68,7 +68,7 @@
   ![Diagram1.2](../assets/Diagram1.2.png) <br>
   ![Sample audio analysis](../outputs/figures/sample_audio_analysis.png)
 
-## 2. Resampling về 16kHz và cắt/đệm về 4s
+## 2. Resampling về 16kHz và cắt/đệm về 4s [preprocess.py](../src/preprocess.py)
 
 - Vì mỗi file âm thanh có thể có tần số lấy mẫu khác nhau cũng như là thời lượng khác nhau nên việc đồng nhất toàn bộ file âm thanh về 1 tần số lấy mẫu và 1 độ dài như nhau sẽ giúp cho mô hình có thể làm việc hiệu quả và tiết kiệm được dữ liệu đầu vào
 - Resampling về 16Hz: thống nhất cách lấy mẫu. Hai tệp có thể cùng mô tả một khoảng thời gian nhưng số mẫu có thể khác nhau. Ở đây, chúng ta thống nhất cách lấy mẫu là 16kHz, chuyển tín hiệu sang một tần số lấy mẫu chung
@@ -77,3 +77,22 @@
 - Lưu đồ thuật toán: <br>
   ![Resampling](../assets/Diagram2.1.png) <br>
   ![Cut/Padding](../assets/Diagram2.2.png)
+
+## 3. Log-mel spectrogram [preprocess.py](../src/preprocess.py)
+
+- Khối này sẽ nhận waveform đã được chuẩn hóa và chuyển thành ma trận Log-Mel spectrogram
+- Lưu đồ thuật toán: <br>
+  ![Log-mel spectrogram](../assets/Diagram3.1.png)
+- Giải thích các biến:
+  - n_fft: Kích thước cửa sổ FFT/STFT
+  - hop_length: khoảng dịch giữa 2 khung liên tiếp
+  - n_mels: Số dải tần Mel
+  - power = 2: Bình phương phổ trước khi tạo Spectrogram
+  - wc: Biến đếm số cửa sổ (vì mỗi cửa sổ có khoảng dịch là 320 nên tổng có 201 cửa sổ)
+
+## 4. Tensor và nhãn lớp: [dataset.py](../src/dataset.py)
+
+- Khối này có vai trò chuyển một bản ghi trong metadata thành dữ liệu mà Pytorch hiểu được
+- Lưu đồ thuật toán:
+  ![Tensors and labels](../assets/Diagram4.1.png)
+
