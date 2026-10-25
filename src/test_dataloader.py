@@ -32,6 +32,17 @@ loader = DataLoader(
 
 features, labels = next(iter(loader))
 
+# In toàn bộ tensor của mẫu đầu tiên
+print("\nTensor của mẫu đầu tiên:")
+print(features[0])
+
+# In một phần nhỏ để dễ đọc
+print("\n5 dải Mel đầu tiên, 10 khung thời gian đầu tiên:")
+print(features[0, 0, :5, :10])
+
+# In nhãn của mẫu đầu tiên
+print("\nLabel:", labels[0].item())
+
 print("Batch features:", features.shape)
 print("Batch labels:", labels.shape)
 print("Labels:", labels.tolist())
