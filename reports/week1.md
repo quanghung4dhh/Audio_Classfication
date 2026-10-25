@@ -88,7 +88,6 @@
   - hop_length: khoảng dịch giữa 2 khung liên tiếp
   - n_mels: Số dải tần Mel
   - power = 2: Bình phương phổ trước khi tạo Spectrogram
-  - wc: Biến đếm số cửa sổ (vì mỗi cửa sổ có khoảng dịch là 320 nên tổng có 201 cửa sổ)
 
 ## 4. Tensor và nhãn lớp: [dataset.py](../src/dataset.py)
 
