@@ -1,0 +1,22 @@
+CNN BASELINE TEST RESULTS
+==================================================
+Accuracy: 0.7276
+Macro F1: 0.7295
+Weighted F1: 0.7221
+
+                  precision    recall  f1-score   support
+
+ air_conditioner     0.6903    0.7800    0.7324       100
+        car_horn     1.0000    0.6061    0.7547        33
+children_playing     0.7000    0.4200    0.5250       100
+        dog_bark     0.6990    0.7200    0.7094       100
+        drilling     0.7264    0.7700    0.7476       100
+   engine_idling     0.7700    0.8280    0.7979        93
+        gun_shot     0.6531    1.0000    0.7901        32
+      jackhammer     0.9130    0.8750    0.8936        96
+           siren     0.5615    0.8795    0.6854        83
+    street_music     0.8438    0.5400    0.6585       100
+
+        accuracy                         0.7276       837
+       macro avg     0.7557    0.7419    0.7295       837
+    weighted avg     0.7476    0.7276    0.7221       837
