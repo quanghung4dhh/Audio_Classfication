@@ -270,3 +270,25 @@ criterion = nn.CrossEntropyLoss()
 ```python
 optimizer = Adam(model.parameters(),lr=LEARNING_RATE,)
 ```
+
+### 3.2. Đánh giá quá trình huấn luyện và Early Stopping:
+
+- Sau mỗi vòng lặp huấn luyện, ta phải tính:
+  - Validation Loss: Giá trị trung bình loss trên tất cả các mẫu
+  - Validation Accuracy: Tỷ lệ dự đoán đúng trên tổng các mẫu được đánh giá
+- Những thông số này sẽ được dùng để đánh giá xem mô hình có thực sự học tốt hay không
+- Ở phần này, ta sẽ sử dụng Validation Dataset, là tập dữ liệu mà mô hình chưa từng gặp, dùng để kiểm tra quá trình huấn luyện, sẽ không cập nhật trọng số
+- Mục tiêu của việc sử dụng Validation: nhằm hạn chế Overfitting đồng thời tăng khả năng tổng quát hóa (Generalization)
+- Early Stopping (Dừng sớm): Đây là kỹ thuật tự động dừng quá trình huấn luyện sau khi hiệu suất trên tập Validation không còn cải thiện sau một số Epoch liên tiếp.
+- Mục đích:
+  - Tránh tiếp tục huấn luyện khi mô hình không còn cải thiện
+  - Hạn chế nguy cơ Overfitting
+  - Tiết kiệm thời gian và tài nguyên tính toán
+  - Giữ lại mô hình có kết quả Validation tốt nhất
+- Patience chính là số Epoch liên tiếp mà mô hình được phép không cải thiện trước khi hệ thống dừng huấn luyện:
+
+```python
+PATIENCE = 7
+```
+
+
