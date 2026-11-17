@@ -99,9 +99,10 @@
     <strong>f(x) = max(0, x)</strong>
   </p>
   - MaxPool2D: Đây là lớp cuối cùng của khối ConvBlock. Sau khi qua các lớp Conv2D, BatchNorm2D và ReLU, ta thu được những bản đồ đặc trưng gồm những thông tin đặc trưng. Tuy nhiên, kích thước không gian của chúng vẫn tương đối lớn. Vì vậy, lớp MaxPool2D dùng để giảm kích thước này xuống. Cơ chế của nó là chia bản đồ đặc trưng thành những vùng nhỏ rồi lấy giá trị lớn nhất trong vùng đó <br>
-  
+
     ![MaxPool2D](../assets/Maxpooling2D.png)
     <br>
+
 - Trong dự án phân loại âm thanh, ta sẽ xếp chồng 3 khối tích chập liên tiếp, giúp trích xuất được đặc trưng ở mức độ sâu hơn thay vì những đặc trưng cơ bản ban đầu
 - Các giai đoạn trích xuất đặc trưng:
   | Giai đoạn | Channels | Frequency | Time |
@@ -208,3 +209,64 @@ có nghĩa là:
   | Siren | 0.8 |
   | Street Music | 0.4 |
 - Lúc này, giá trị Logit lớn nhất là 3.8, tương ứng với Dog Bark, do đó, mô hình dự đoán đây là tiếng chó sủa
+
+=================================================================================================
+
+## 3. Xây dựng cơ chế huấn luyện mô hình: file src/train.py
+
+### 3.1. Vòng lặp huấn luyện (Epoch)
+
+- Vòng lặp huấn luyện (Epoch) là một lần mô hình duyệt qua toàn bộ tập dữ liệu huấn luyện 1 cách trọn vẹn
+- Đối với mô hình CNN dùng để phân loại âm thanh, một vòng lặp huấn luyện có quá trình như sau:
+  - Lấy batch dữ liệu -> Forward Propagation -> Calculate Loss -> Backward Propagation -> Optimizer Step
+
+#### 3.1.1. Chuẩn bị chế độ huấn luyện:
+
+- Đây là giai đoạn chuẩn bị cho các vòng lặp huấn luyện. Ở giai đoạn này, ta chuyển mô hình sang chế độ huấn luyện:
+
+```python
+model.train()
+```
+
+- Cùng với đó là các biến cũng được khai báo để theo dõi kết quả sau các vòng lặp huấn luyện:
+  | Biến | Công dụng |
+  | --- | --- |
+  | total_loss | Tổng Loss của các mẫu đã xử lý |
+  | correct | Tổng số mẫu được dự đoán đúng |
+  | total | Tổng số mẫu đã xử lý |
+
+#### 3.1.2. Lấy từng batch dữ liệu:
+
+- Giai đoạn này sẽ lấy từng batch dữ liệu đã qua khối tiền xử lý tín hiệu cùng với nhãn của chúng cho mô hình có thể học
+
+#### 3.1.3. Lan truyền xuôi (Forward Propagation):
+
+- Ở giai đoạn này, mô hình sẽ tiếp nhận dữ liệu và tạo ra dự đoán
+
+#### 3.1.4. Tính toán loss (Calculate Loss):
+
+- Sau khi mô hình đưa ra dự đoán, ta cần phải biết dự đoán đó có chính xác hay không.
+- Giai đoạn này sẽ tính toán loss, giúp đưa ra sự sai lệch của dự đoán so với nhãn thực tế. Từ đó làm cơ sở để cho việc tính gradient và cập nhật trọng số
+- Ở đây, ta sử dụng Cross Entropy Loss để tính toán loss:
+
+```python
+criterion = nn.CrossEntropyLoss()
+```
+
+#### 3.1.5. Lan truyền ngược (Backward Propagation):
+
+- Ở giai đoạn này, thuật toán lan truyền ngược sẽ thực hiện việc tính toán Gradient, giúp ta biết được loss thay đổi thế nào khi một trọng số thay đổi
+- Lan truyền ngược giúp cung cấp hướng và mức độ biến thiên cục bộ để thuật toán tối ưu quyết định cách điều chỉnh các tham số
+
+#### 3.1.6. Cập nhật trọng số (Optimizer Step):
+
+- Sau khi đã có Gradient, ta phải biết cách để cập nhật trọng số như thế nào. Đây chính là nhiệm vụ của giai đoạn này
+- Ở giai đoạn này, thuật toán được sử dụng là thuật toán Adam. Nó sẽ sử dụng Gradient để điều chỉnh các tham số của mô hình để giảm hàm Loss:
+- Thuật toán này theo dõi hai đại lượng chính:
+  - Trung bình động của Gradient
+  - Trung bình động của bình phương Gradient
+- Điều này giúp Adam thích nghi với quá trình cập nhật từng tham số:
+
+```python
+optimizer = Adam(model.parameters(),lr=LEARNING_RATE,)
+```
