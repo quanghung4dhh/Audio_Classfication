@@ -291,4 +291,31 @@ optimizer = Adam(model.parameters(),lr=LEARNING_RATE,)
 PATIENCE = 7
 ```
 
+### 3.3. Lưu và quản lý mô hình huấn luyện:
 
+- Sau khi tính toán và đánh giá mô hình sau mỗi vòng lặp huấn luyện, ta sẽ lưu lại mô hình tốt nhất. Ở trong dự án này, mô hình tốt nhất sẽ được lưu ở outputs/checkpoints
+- Lưu checkpoint sẽ giúp:
+  - Giữ lại mô hình có Validation tốt nhất
+  - Nạp lại mô hình để đánh giá
+  - Tái sử dụng mô hình trong các giai đoạn tiếp theo
+  - Lưu lại thông tin cần thiết để kiểm tra kết quả huấn luyện
+
+### 3.4 Đánh giá mô hình (Evaluate):
+
+- Đây là bước xác định mô hình CNN baseline đưa ra dự đoán tốt đến đâu trên tập dữ liệu chưa từng gặp
+- Ở giai đoạn này, ta sẽ sử dụng tập dữ liệu Test. Quy trình như sau:
+  Load Best Checkpoint -> Load Test DataLoader -> CNN dự đoán từng patch -> Thu thập nhãn thực tế và nhãn dự đoán -> Tính các chỉ số đánh giá -> Tạo Confusion Matrix -> Báo cáo kết quả
+- Các chỉ số đánh giá sẽ cho ta biết hiệu suất dự đoán của mô hình trên toàn bộ tập Test:
+  | Chỉ số | Ý nghĩa |
+  | --- | --- |
+  | Accuracy | Tỷ lệ dự đoán đúng trên toàn bộ mẫu |
+  | Precision | Mức độ chính xác của các dự đoán thuộc một lớp |
+  | Recall | Tỷ lệ mẫu thực tế của lớp được tìm thấy |
+  | F1-score | Cân bằng Precision và Recall |
+  | Macro F1 | F1 trung bình, mỗi lớp có trọng số bằng nhau |
+  | Weighted F1 | F1 trung bình có trọng số theo số lượng mẫu |
+- Confusion matrix là ma trận so sánh nhãn thực tế với nhãn dự đoán:
+  - Các đường chéo chính: số mẫu được dự đoán đúng
+  - Các ô ngoài đường chéo: số mẫu bị dự đoán nhầm sang lớp khác
+    <br>
+    ![Confusion Matrix](../outputs/figures/cnn_confusion_matrix.png)
