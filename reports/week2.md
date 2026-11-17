@@ -98,8 +98,10 @@
   <p align="center">
     <strong>f(x) = max(0, x)</strong>
   </p>
-  - MaxPool2D: Đây là lớp cuối cùng của khối ConvBlock. Sau khi qua các lớp Conv2D, BatchNorm2D và ReLU, ta thu được những bản đồ đặc trưng gồm những thông tin đặc trưng. Tuy nhiên, kích thước không gian của chúng vẫn tương đối lớn. Vì vậy, lớp MaxPool2D dùng để giảm kích thước này xuống. Cơ chế của nó là chia bản đồ đặc trưng thành những vùng nhỏ rồi lấy giá trị lớn nhất trong vùng đó
+  - MaxPool2D: Đây là lớp cuối cùng của khối ConvBlock. Sau khi qua các lớp Conv2D, BatchNorm2D và ReLU, ta thu được những bản đồ đặc trưng gồm những thông tin đặc trưng. Tuy nhiên, kích thước không gian của chúng vẫn tương đối lớn. Vì vậy, lớp MaxPool2D dùng để giảm kích thước này xuống. Cơ chế của nó là chia bản đồ đặc trưng thành những vùng nhỏ rồi lấy giá trị lớn nhất trong vùng đó <br>
+  
     ![MaxPool2D](../assets/Maxpooling2D.png)
+    <br>
 - Trong dự án phân loại âm thanh, ta sẽ xếp chồng 3 khối tích chập liên tiếp, giúp trích xuất được đặc trưng ở mức độ sâu hơn thay vì những đặc trưng cơ bản ban đầu
 - Các giai đoạn trích xuất đặc trưng:
   | Giai đoạn | Channels | Frequency | Time |
@@ -118,16 +120,8 @@
 
 - Đây là khối thực hiện Avarage Pooling với kích thước đầu ra được xác định trước, thay vì phải tự cấu hình kích thước bộ lọc Filter và bước stride
 - Ở đầu ra mỗi Feature Map, khối này sẽ tính giá trị trung bình trên toàn bộ 8x25 vị trí:
-<p align="center">
-  <strong>
-  \[
-  y_c=
-  \frac{1}{H\times W}
-  \sum_{i=1}^{H}\sum_{j=1}^{W}
-  x_{c,i,j}
-  \]
-  </strong>
-</p>
+
+![GAP](https://latex.codecogs.com/svg.image?y_c=\frac{1}{H\times%20W}\sum_{i=1}^{H}\sum_{j=1}^{W}x_{c,i,j})
 
 - Trong đó
   - c: Chỉ số kênh đặc trưng
@@ -149,11 +143,7 @@ có nghĩa là chúng ta muốn mỗi Feature Map sẽ chỉ còn một giá tr�
 - Trong khi đó, lớp Linear cần nhận đầu vào là vector đặc trưng cho từng mẫu
 - Flatten là lớp làm phẳng, biến đổi tensor thành vector mà không làm thay đổi giá trị:
   <p align="center">
-  \[
-  [B,64,1,1]
-  \rightarrow
-  [B,64]
-  \]
+    [B,64,1,1] -> [B,64]
   </p>
 - Điều này có nghĩa là sau khi qua khối này, mỗi mẫu âm thanh sẽ được biểu diễn bằng 1 vector gồm 64 giá trị
 
@@ -165,7 +155,7 @@ có nghĩa là chúng ta muốn mỗi Feature Map sẽ chỉ còn một giá tr�
 - Overfitting là hiện tượng xảy ra khi mô hình học quá sát dữ liệu huấn luyện, khiến khả năng dự đoán trên dữ liệu chưa từng gặp bị giảm
 - Dropout hoạt động bằng cách ngẫu nhiên đưa một tỷ lệ các giá trị đầu vào về 0 trong quá trình huấn luyện
 - Vai trò: Hạn chế việc mô hình phụ thuộc quá mức vào một số đặc trưng nhất định, qua đó hỗ trợ cải thiện khả năng tổng quát hóa <br>
-  ![Dropout](../assets/Dropout.jpeg)
+  ![Dropout](../assets/dropout.jpeg)
   <br>
 - Trong dự án:
 
@@ -194,9 +184,7 @@ có nghĩa là:
 - Khối Linear có vai trò tính toán một phép biến đổi tuyến tính:
   <p align="center">
     <strong>
-      \[
       Y=XW^T+b
-      \]
     </strong>
   </p>
 - Trong đó:
