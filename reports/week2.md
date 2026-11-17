@@ -75,3 +75,148 @@
     - Chia sẻ trọng số giữa các vị trí thông qua Filter
     - Có thể học được những đặc trưng từ đơn giản đến phức tạp qua nhiều lớp
     - Là kiến trúc baseline tương đối gọn, dễ triển khai và đánh giá
+
+==================================================================================================
+
+### 2.1 Triển khai khối ConvBlock (Khối tích chập):
+
+- Khối tích chập ConvBlock là khối xử lý cơ bản của CNN, dùng để trích xuất đặc trưng từ Log-Mel Spectrogram
+  | Lớp | Chức năng | Tại sao cần? |
+  | --- | --- | --- |
+  | Conv2D | Tích chập | Trích xuất đặc trưng |
+  | BatchNorm2D | Chuẩn hóa | Hỗ trợ quá trình tối ưu |
+  | ReLU | Kích hoạt | Tạo tính phi tuyến |
+  | MaxPool2D | Gộp cực đại | Giảm kích thước đặc trưng |
+- Chức năng của các lớp:
+  - Conv2D: Đây là lớp sử dụng bộ lọc Filter để quét qua Log-Mel Spectrogram, tính toán và tạo ra đặc trưng. <br>
+    ![Conv2D](../assets/Conv2D.png)
+    <br>
+  - BatchNorm2D: Sau khi qua lớp Conv2D, ta thu được các bản đồ đặc trưng (Feature Maps). Tuy nhiên, các bản đồ đặc trưng có thể có phân bố các giá trị khác nhau, khiến quá trình tối ưu hóa mô hình gặp khó khăn. Do đó lớp BatchNorm2D được dùng để chuẩn hóa các giá trị đặc trưng theo từng kênh <br>
+    ![BatchNorm2D](../assets/BatchNorm2D.png)
+    <br>
+  - ReLU: Lớp này đóng vai trò là hàm kích hoạt dùng để tạo ra tính phi tuyến cho mạng. Nó là một hàm kích hoạt:
+  <p align="center">
+    <strong>f(x) = max(0, x)</strong>
+  </p>
+  - MaxPool2D: Đây là lớp cuối cùng của khối ConvBlock. Sau khi qua các lớp Conv2D, BatchNorm2D và ReLU, ta thu được những bản đồ đặc trưng gồm những thông tin đặc trưng. Tuy nhiên, kích thước không gian của chúng vẫn tương đối lớn. Vì vậy, lớp MaxPool2D dùng để giảm kích thước này xuống. Cơ chế của nó là chia bản đồ đặc trưng thành những vùng nhỏ rồi lấy giá trị lớn nhất trong vùng đó
+    ![MaxPool2D](../assets/Maxpooling2D.png)
+- Trong dự án phân loại âm thanh, ta sẽ xếp chồng 3 khối tích chập liên tiếp, giúp trích xuất được đặc trưng ở mức độ sâu hơn thay vì những đặc trưng cơ bản ban đầu
+- Các giai đoạn trích xuất đặc trưng:
+  | Giai đoạn | Channels | Frequency | Time |
+  | --- | --- | --- | --- |
+  | Input | 1 | 64 | 201 |
+  | ConvBlock1 | 16 | 32 | 100 |
+  | ConvBlock2 | 32 | 16 | 50 |
+  | ConvBlock3 | 64 | 8 | 25 |
+- Thiết kế như này giúp cho CNN có thể tạo ra nhiều Feature Maps hơn, giúp trích xuất nhiều dạng đặc trung khác nhau
+- Đồng thời, giảm kích thước không gian, ở đây là Frequency và Time giảm thông qua lớp MaxPool2D, giúp tiết kiệm chi phí tính toán
+- Các tầng sâu hơn còn có thể kết hợp những đặc trưng của tầng trước đó thành những biểu diễn phức tạp hơn
+
+================================================================================================
+
+### 2.2. AdaptiveAvgPool2D
+
+- Đây là khối thực hiện Avarage Pooling với kích thước đầu ra được xác định trước, thay vì phải tự cấu hình kích thước bộ lọc Filter và bước stride
+- Ở đầu ra mỗi Feature Map, khối này sẽ tính giá trị trung bình trên toàn bộ 8x25 vị trí:
+<p align="center">
+  <strong>
+  \[
+  y_c=
+  \frac{1}{H\times W}
+  \sum_{i=1}^{H}\sum_{j=1}^{W}
+  x_{c,i,j}
+  \]
+  </strong>
+</p>
+
+- Trong đó
+  - c: Chỉ số kênh đặc trưng
+  - H: Chiều cao Feature Map (H=8)
+  - W: Chiều rộng Feature Map (W=25)
+- Ở trong code, ta định nghĩa
+
+```python
+nn.AdaptiveAvgPool2d((1, 1))
+```
+
+có nghĩa là chúng ta muốn mỗi Feature Map sẽ chỉ còn một giá trị duy nhất. Đầu ra sẽ có kích thước: Bx64x1x1
+
+- Khối này có vai trò giúp giảm đáng kể kích thước dữ liệu trước khi thực hiện phân loại
+
+### 2.3. Flatten:
+
+- Sau khi đi qua khối AdaptiveAvgPool2D, tenser vẫn có 4 chiều: Bx64X1X1
+- Trong khi đó, lớp Linear cần nhận đầu vào là vector đặc trưng cho từng mẫu
+- Flatten là lớp làm phẳng, biến đổi tensor thành vector mà không làm thay đổi giá trị:
+  <p align="center">
+  \[
+  [B,64,1,1]
+  \rightarrow
+  [B,64]
+  \]
+  </p>
+- Điều này có nghĩa là sau khi qua khối này, mỗi mẫu âm thanh sẽ được biểu diễn bằng 1 vector gồm 64 giá trị
+
+================================================================================================
+
+### 2.4. Dropout
+
+- Dropout là kỹ thuật điều chỉnh (Regularization), dùng để hạn chế hiện tượng Overfitting
+- Overfitting là hiện tượng xảy ra khi mô hình học quá sát dữ liệu huấn luyện, khiến khả năng dự đoán trên dữ liệu chưa từng gặp bị giảm
+- Dropout hoạt động bằng cách ngẫu nhiên đưa một tỷ lệ các giá trị đầu vào về 0 trong quá trình huấn luyện
+- Vai trò: Hạn chế việc mô hình phụ thuộc quá mức vào một số đặc trưng nhất định, qua đó hỗ trợ cải thiện khả năng tổng quát hóa <br>
+  ![Dropout](../assets/Dropout.jpeg)
+  <br>
+- Trong dự án:
+
+```python
+nn.Dropout(0.3)
+```
+
+nghĩa là 30% giá trị được chọn ngẫu nhiên để loại bỏ trong mỗi lần huấn luyện
+
+### 2.5. Linear - Fully Connected Layer
+
+- Đây là khối thực hiện nhiệm vụ phân loại cuối cùng: <br>
+  ![Fully Connect](../assets/FullyConnectLayer.png)
+  <br>
+- Trong dự án:
+
+```python
+nn.Linear(64, 10)
+```
+
+có nghĩa là:
+
+- Input Features = 64
+- Output Features = 10
+- Đầu ra là 10 vì mô hình cần phân loại 10 lớp âm thanh
+- Khối Linear có vai trò tính toán một phép biến đổi tuyến tính:
+  <p align="center">
+    <strong>
+      \[
+      Y=XW^T+b
+      \]
+    </strong>
+  </p>
+- Trong đó:
+  - X: Vector đặc trưng đầu vào, kích thước 64
+  - W: Ma trận trọng số của lớp Linear
+  - b: Vector bias
+  - Y: Vector kết quả gồm 10 giá trị
+- Kết quả: Y có kích thước 10x1
+- Mỗi giá trị phần tử của Y tương ứng với điểm số của một lớp âm thanh. Các giá trị này gọi là Logits.
+- Ví dụ, đối với 1 lớp âm thanh, mô hình có thể đưa ra:
+  | Lớp | Logit |
+  | --- | --- |
+  | Air Conditioner | 0.5 |
+  | Car Horn | 0.2 |
+  | Children Playing | -0.3 |
+  | Dog Bark | 3.8 |
+  | Drilling | 0.1 |
+  | Engine Idling | 0.6 |
+  | Gun Shot | -1.2 |
+  | Jackhammer | 0.3 |
+  | Siren | 0.8 |
+  | Street Music | 0.4 |
+- Lúc này, giá trị Logit lớn nhất là 3.8, tương ứng với Dog Bark, do đó, mô hình dự đoán đây là tiếng chó sủa
