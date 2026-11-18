@@ -8,15 +8,20 @@ from torch.optim import Adam
 from src.cnn import AudioCNN
 from src.data import build_dataloaders
 
+from src.config import (
+    BATCH_SIZE,
+    LEARNING_RATE,
+    NUM_EPOCHS,
+    PATIENCE,
+    NUM_CLASSES,
+    SEED,
+)
+from src.utils import set_seed
+
 
 # ==========================================
 # Configuration
 # ==========================================
-
-BATCH_SIZE = 32
-LEARNING_RATE = 0.001
-NUM_EPOCHS = 30
-PATIENCE = 7
 
 ROOT = Path(__file__).resolve().parents[1]
 CHECKPOINT_DIR = ROOT / "outputs" / "checkpoints"
@@ -110,6 +115,10 @@ def validate(model, loader, criterion, device):
 
 def main():
 
+    # Set random seed for reproducibility
+    set_seed(SEED)
+
+    print(f"Random seed: {SEED}")
     # Select device
     device = torch.device(
         "cuda" if torch.cuda.is_available() else "cpu"
@@ -127,7 +136,7 @@ def main():
     val_loader = loaders["val"]
 
     # Initialize model
-    model = AudioCNN(num_classes=10).to(device)
+    model = AudioCNN(num_classes=NUM_CLASSES).to(device)
 
     # Loss function and optimizer
     criterion = nn.CrossEntropyLoss()
@@ -184,6 +193,16 @@ def main():
                     "optimizer_state_dict": optimizer.state_dict(),
                     "val_loss": val_loss,
                     "val_accuracy": val_acc,
+
+                    # Save training configuration
+                    "config": {
+                        "batch_size": BATCH_SIZE,
+                        "learning_rate": LEARNING_RATE,
+                        "num_epochs": NUM_EPOCHS,
+                        "patience": PATIENCE,
+                        "num_classes": NUM_CLASSES,
+                        "seed": SEED,
+                    },
                 },
                 BEST_MODEL_PATH,
             )
