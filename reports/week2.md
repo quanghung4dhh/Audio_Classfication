@@ -29,12 +29,13 @@
   - Gán nhãn tương ứng
   - Gom nhiều mẫu thành từng batch để đưa vào mô hình
 - Để xây dựng cơ chế đọc dữ liệu, ta chuyển đổi dữ liệu âm thanh thành Tensor và chia dữ liệu thành 3 tập:
-  | Tập dữ liệu | Fold | Số mẫu | Mục đích |
-  | --- | --- | --- | --- |
-  | Train | 1–8 | 7.079 | Huấn luyện mô hình |
-  | Validation| 9 | 816 | Theo dõi và lựa chọn mô hình |
-  | Test | 10 | 837 | Đánh giá cuối cùng |
-  | Tổng | 1–10 | 8.732 | Toàn bộ dataset |
+
+  | Tập dữ liệu | Fold | Số mẫu | Mục đích                     |
+  | ----------- | ---- | ------ | ---------------------------- |
+  | Train       | 1–8  | 7.079  | Huấn luyện mô hình           |
+  | Validation  | 9    | 816    | Theo dõi và lựa chọn mô hình |
+  | Test        | 10   | 837    | Đánh giá cuối cùng           |
+  | Tổng        | 1–10 | 8.732  | Toàn bộ dataset              |
 
 - Tại sao lại cần phải có 3 tập dữ liệu?
   - Đây là một trong những nguyên tắc quan trọng nhất của ML
@@ -87,12 +88,14 @@
 ### 2.1 Triển khai khối ConvBlock (Khối tích chập):
 
 - Khối tích chập ConvBlock là khối xử lý cơ bản của CNN, dùng để trích xuất đặc trưng từ Log-Mel Spectrogram
-  | Lớp | Chức năng | Tại sao cần? |
-  | --- | --- | --- |
-  | Conv2D | Tích chập | Trích xuất đặc trưng |
-  | BatchNorm2D | Chuẩn hóa | Hỗ trợ quá trình tối ưu |
-  | ReLU | Kích hoạt | Tạo tính phi tuyến |
-  | MaxPool2D | Gộp cực đại | Giảm kích thước đặc trưng |
+
+  | Lớp         | Chức năng   | Tại sao cần?              |
+  | ----------- | ----------- | ------------------------- |
+  | Conv2D      | Tích chập   | Trích xuất đặc trưng      |
+  | BatchNorm2D | Chuẩn hóa   | Hỗ trợ quá trình tối ưu   |
+  | ReLU        | Kích hoạt   | Tạo tính phi tuyến        |
+  | MaxPool2D   | Gộp cực đại | Giảm kích thước đặc trưng |
+
 - Chức năng của các lớp:
   - Conv2D: Đây là lớp sử dụng bộ lọc Filter để quét qua Log-Mel Spectrogram, tính toán và tạo ra đặc trưng. <br>
     ![Conv2D](../assets/Conv2D.png)
@@ -111,12 +114,14 @@
 
 - Trong dự án phân loại âm thanh, ta sẽ xếp chồng 3 khối tích chập liên tiếp, giúp trích xuất được đặc trưng ở mức độ sâu hơn thay vì những đặc trưng cơ bản ban đầu
 - Các giai đoạn trích xuất đặc trưng:
-  | Giai đoạn | Channels | Frequency | Time |
-  | --- | --- | --- | --- |
-  | Input | 1 | 64 | 201 |
-  | ConvBlock1 | 16 | 32 | 100 |
-  | ConvBlock2 | 32 | 16 | 50 |
-  | ConvBlock3 | 64 | 8 | 25 |
+
+  | Giai đoạn  | Channels | Frequency | Time |
+  | ---------- | -------- | --------- | ---- |
+  | Input      | 1        | 64        | 201  |
+  | ConvBlock1 | 16       | 32        | 100  |
+  | ConvBlock2 | 32       | 16        | 50   |
+  | ConvBlock3 | 64       | 8         | 25   |
+
 - Thiết kế như này giúp cho CNN có thể tạo ra nhiều Feature Maps hơn, giúp trích xuất nhiều dạng đặc trung khác nhau
 - Đồng thời, giảm kích thước không gian, ở đây là Frequency và Time giảm thông qua lớp MaxPool2D, giúp tiết kiệm chi phí tính toán
 - Các tầng sâu hơn còn có thể kết hợp những đặc trưng của tầng trước đó thành những biểu diễn phức tạp hơn
@@ -202,18 +207,20 @@ có nghĩa là:
 - Kết quả: Y có kích thước 10x1
 - Mỗi giá trị phần tử của Y tương ứng với điểm số của một lớp âm thanh. Các giá trị này gọi là Logits.
 - Ví dụ, đối với 1 lớp âm thanh, mô hình có thể đưa ra:
-  | Lớp | Logit |
-  | --- | --- |
-  | Air Conditioner | 0.5 |
-  | Car Horn | 0.2 |
-  | Children Playing | -0.3 |
-  | Dog Bark | 3.8 |
-  | Drilling | 0.1 |
-  | Engine Idling | 0.6 |
-  | Gun Shot | -1.2 |
-  | Jackhammer | 0.3 |
-  | Siren | 0.8 |
-  | Street Music | 0.4 |
+
+  | Lớp              | Logit |
+  | ---------------- | ----- |
+  | Air Conditioner  | 0.5   |
+  | Car Horn         | 0.2   |
+  | Children Playing | -0.3  |
+  | Dog Bark         | 3.8   |
+  | Drilling         | 0.1   |
+  | Engine Idling    | 0.6   |
+  | Gun Shot         | -1.2  |
+  | Jackhammer       | 0.3   |
+  | Siren            | 0.8   |
+  | Street Music     | 0.4   |
+
 - Lúc này, giá trị Logit lớn nhất là 3.8, tương ứng với Dog Bark, do đó, mô hình dự đoán đây là tiếng chó sủa
 
 =================================================================================================
@@ -235,11 +242,12 @@ model.train()
 ```
 
 - Cùng với đó là các biến cũng được khai báo để theo dõi kết quả sau các vòng lặp huấn luyện:
-  | Biến | Công dụng |
-  | --- | --- |
+
+  | Biến       | Công dụng                      |
+  | ---------- | ------------------------------ |
   | total_loss | Tổng Loss của các mẫu đã xử lý |
-  | correct | Tổng số mẫu được dự đoán đúng |
-  | total | Tổng số mẫu đã xử lý |
+  | correct    | Tổng số mẫu được dự đoán đúng  |
+  | total      | Tổng số mẫu đã xử lý           |
 
 #### 3.1.2. Lấy từng batch dữ liệu:
 
@@ -312,14 +320,16 @@ PATIENCE = 7
 - Ở giai đoạn này, ta sẽ sử dụng tập dữ liệu Test. Quy trình như sau:
   Load Best Checkpoint -> Load Test DataLoader -> CNN dự đoán từng patch -> Thu thập nhãn thực tế và nhãn dự đoán -> Tính các chỉ số đánh giá -> Tạo Confusion Matrix -> Báo cáo kết quả
 - Các chỉ số đánh giá sẽ cho ta biết hiệu suất dự đoán của mô hình trên toàn bộ tập Test:
-  | Chỉ số | Ý nghĩa |
-  | --- | --- |
-  | Accuracy | Tỷ lệ dự đoán đúng trên toàn bộ mẫu |
-  | Precision | Mức độ chính xác của các dự đoán thuộc một lớp |
-  | Recall | Tỷ lệ mẫu thực tế của lớp được tìm thấy |
-  | F1-score | Cân bằng Precision và Recall |
-  | Macro F1 | F1 trung bình, mỗi lớp có trọng số bằng nhau |
-  | Weighted F1 | F1 trung bình có trọng số theo số lượng mẫu |
+
+  | Chỉ số      | Ý nghĩa                                        |
+  | ----------- | ---------------------------------------------- |
+  | Accuracy    | Tỷ lệ dự đoán đúng trên toàn bộ mẫu            |
+  | Precision   | Mức độ chính xác của các dự đoán thuộc một lớp |
+  | Recall      | Tỷ lệ mẫu thực tế của lớp được tìm thấy        |
+  | F1-score    | Cân bằng Precision và Recall                   |
+  | Macro F1    | F1 trung bình, mỗi lớp có trọng số bằng nhau   |
+  | Weighted F1 | F1 trung bình có trọng số theo số lượng mẫu    |
+
 - Confusion matrix là ma trận so sánh nhãn thực tế với nhãn dự đoán:
   - Các đường chéo chính: số mẫu được dự đoán đúng
   - Các ô ngoài đường chéo: số mẫu bị dự đoán nhầm sang lớp khác
