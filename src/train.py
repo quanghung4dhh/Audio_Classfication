@@ -1,6 +1,7 @@
 
 from pathlib import Path
 
+import json
 import torch
 from torch import nn
 from torch.optim import Adam
@@ -26,6 +27,8 @@ from src.utils import set_seed
 ROOT = Path(__file__).resolve().parents[1]
 CHECKPOINT_DIR = ROOT / "outputs" / "checkpoints"
 BEST_MODEL_PATH = CHECKPOINT_DIR / "best_cnn.pth"
+REPORT_DIR = ROOT / "outputs" / "reports"
+HISTORY_PATH = REPORT_DIR / "training_history.json"
 
 
 # ==========================================
@@ -152,6 +155,16 @@ def main():
     best_val_loss = float("inf")
     epochs_without_improvement = 0
 
+    # Store metrics for every epoch
+    history = {
+        "epoch": [],
+        "train_loss": [],
+        "train_accuracy": [],
+        "val_loss": [],
+        "val_accuracy": [],
+        "learning_rate": [],
+    }
+
     print("\nStarting training...")
     print("=" * 60)
 
@@ -170,6 +183,16 @@ def main():
             val_loader,
             criterion,
             device,
+        )
+
+        # Record training metrics
+        history["epoch"].append(epoch)
+        history["train_loss"].append(train_loss)
+        history["train_accuracy"].append(train_acc)
+        history["val_loss"].append(val_loss)
+        history["val_accuracy"].append(val_acc)
+        history["learning_rate"].append(
+            optimizer.param_groups[0]["lr"]
         )
 
         print(
@@ -221,6 +244,18 @@ def main():
     print("Training completed.")
     print(f"Best validation loss: {best_val_loss:.4f}")
     print(f"Checkpoint saved at: {BEST_MODEL_PATH}")
+
+    # Save training history
+    REPORT_DIR.mkdir(parents=True, exist_ok=True)
+
+    with open(HISTORY_PATH, "w", encoding="utf-8") as file:
+        json.dump(
+            history,
+            file,
+            indent=4,
+        )
+
+    print(f"Training history saved at: {HISTORY_PATH}")
 
 
 if __name__ == "__main__":
