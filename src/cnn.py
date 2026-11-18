@@ -1,6 +1,7 @@
 
 import torch
 from torch import nn
+from src.config import DROPOUT
 
 
 class ConvBlock(nn.Module):
@@ -50,7 +51,7 @@ class AudioCNN(nn.Module):
 
         self.classifier = nn.Sequential(
             nn.Flatten(),
-            nn.Dropout(p=0.3),
+            nn.Dropout(p=DROPOUT),
             nn.Linear(64, num_classes),
         )
 

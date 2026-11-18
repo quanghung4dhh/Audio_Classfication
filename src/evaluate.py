@@ -1,6 +1,7 @@
 
 from pathlib import Path
 
+from src.config import BATCH_SIZE, NUM_CLASSES
 import matplotlib.pyplot as plt
 import pandas as pd
 import torch
@@ -28,8 +29,6 @@ CHECKPOINT_PATH = ROOT / "outputs" / "checkpoints" / "best_cnn.pth"
 FIGURE_DIR = ROOT / "outputs" / "figures"
 REPORT_DIR = ROOT / "outputs" / "reports"
 
-BATCH_SIZE = 32
-NUM_CLASSES = 10
 
 
 # ==========================================
