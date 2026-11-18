@@ -6,6 +6,12 @@
 4. PyTorch. CrossEntropyLoss.
 5. PyTorch. Conv2d.
 6. PyTorch. Saving and Loading Models.
+7. Salamon, J., Jacoby, C., & Bello, J. P. (2014). A Dataset and Taxonomy for Urban Sound Research. Proceedings of the 22nd ACM International Conference on Multimedia, 1041–1044.
+8. Piczak, K. J. (2015). Environmental Sound Classification with Convolutional Neural Networks. Proceedings of the IEEE 25th International Workshop on Machine Learning for Signal Processing.
+9. Ioffe, S., & Szegedy, C. (2015). Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift. Proceedings of the 32nd International Conference on Machine Learning, 37, 448–456.
+10. Srivastava, N., Hinton, G., Krizhevsky, A., Sutskever, I., & Salakhutdinov, R. (2014). Dropout: A Simple Way to Prevent Neural Networks from Overfitting. Journal of Machine Learning Research, 15, 1929–1958.
+11. Kingma, D. P., & Ba, J. (2015). Adam: A Method for Stochastic Optimization. International Conference on Learning Representations (ICLR).
+12. Prechelt, L. (1998). Automatic Early Stopping Using Cross Validation: Quantifying the Criteria. Neural Networks, 11(4), 761–767.
 
 ==================================================================================================
 
